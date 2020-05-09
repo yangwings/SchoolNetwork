@@ -7,6 +7,7 @@ using SchoolNetwork.Interfaces;
 using SchoolNetwork.Log;
 using System;
 using System.Collections.Generic;
+using System.Diagnostics;
 using System.Linq;
 using System.Reflection;
 using System.Text;
@@ -79,7 +80,6 @@ namespace SchoolNetwork
 
                 if (ret)//未启动
                 {
-                    
                     Run<TIWebMethod>(Configuration.SetConfig<TIWebMethod>(
                         (LoggingMode)Enum.Parse(typeof(LoggingMode),BackLoggingInfo(() => { return typeof(TIWebMethod).GetCustomAttribute(typeof(LoggerAttribute)); },0)),
                         BackLoggingInfo(() => { return typeof(TIWebMethod).GetCustomAttribute(typeof(LoggerAttribute)); },1)
@@ -94,11 +94,11 @@ namespace SchoolNetwork
             }
             catch (Exception ex)
             {
-                MessageBox.Show(ex.StackTrace);
+                Debug.WriteLine(ex.StackTrace);
             }
         }
 
-        private static string BackLoggingInfo(Func<object> func,UInt16 src) 
+        private static string BackLoggingInfo(Func<Attribute> func,UInt16 src) 
         {
             try
             {
@@ -142,10 +142,8 @@ namespace SchoolNetwork
                 }
             }
             config.ContextMenu.Init();
-            StringBuilder temp_u;
-            StringBuilder temp_p;
 
-            if(!Expandini.GetiniFile(out temp_u, out temp_p, config)) config.ContextMenu.SetLogin();
+            if (!Expandini.GetiniFile(out StringBuilder temp_u, out StringBuilder temp_p, config)) config.ContextMenu.SetLogin();
             config.ContextMenu.SetUser();
             while (true)
             {
